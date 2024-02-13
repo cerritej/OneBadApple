@@ -1,46 +1,38 @@
+#include "node.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "node.h"
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
-// Function to create a new node
-struct Node* createNode(int data) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    if (newNode == NULL) {
-        printf("Memory allocation failed\n");
-        exit(1);
+void initializeNode(struct Node* node, int id) {
+    node->id = id;
+    node->hasApple = false;
+    int fd[2];
+    if (pipe(fd) == -1) {
+        perror("pipe");
+        exit(EXIT_FAILURE);
     }
-    newNode->data = data;
-    newNode->next = NULL;
-    return newNode;
+    node->read_fd = fd[0];    // Read end of the pipe
+    node->write_fd = fd[1];   // Write end of the pipe
 }
 
-// Function to create a ring structure
-struct Node* createRing(int n) {
-    if (n <= 0) {
-        printf("Invalid number of nodes\n");
-        return NULL;
+void sendApple(struct Node* sender, struct Node* receiver, const char* message) {
+    ssize_t bytes_written = write(sender->write_fd, message, strlen(message) + 1);
+    if (bytes_written == -1) {
+        perror("write");
+        exit(EXIT_FAILURE);
     }
-
-    struct Node* head = createNode(0);
-    struct Node* current = head;
-
-    for (int i = 1; i < n; i++) {
-        current->next = createNode(i);
-        current = current->next;
-    }
-
-    current->next = head;
-
-    return head;
 }
 
-// Function to print the ring
-void printRing(struct Node* head, int size) {
-    struct Node* current = head;
-    printf("Ring: ");
-    for (int i = 0; i < size; i++) {
-        printf("%d -> ", current->data);
-        current = current->next;
+void receiveApple(struct Node* node) {
+    char buffer[1024];
+    ssize_t bytes_read = read(node->read_fd, buffer, sizeof(buffer));
+    if (bytes_read == -1) {
+        perror("read");
+        exit(EXIT_FAILURE);
     }
-    printf("...\n");
+    printf("Node %d received the apple with message: %s\n", node->id, buffer);
+    node->hasApple = true;
 }
