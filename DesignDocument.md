@@ -13,3 +13,21 @@ Design Overview and Implementation
 
 4. **Ensure that the last node in the ring connects back to the first node**:
    - After creating the ring structure in `createRing()`, the code links the last node back to the first node, thus ensuring that the circular arrangement is closed, and the last node connects back to the first node as required.
+  
+*B. Apple Passing Mechanism*
+
+1. **Introduce the Concept of an "Apple"**:
+   - The "apple" represents a message that is passed between nodes in the circular communication system. In our implementation, the apple contains a message payload.
+
+2. **Define Rules for Passing the Apple in a Circular Fashion**:
+   - We implement a loop within the `main()` function to iterate through each node in the circular communication system. Each node sends the apple to the next node in the ring.
+
+3. **Implement Logic for Nodes to Receive the Apple**:
+   - We define the `receiveApple()` function in `node.c`, which allows a node to receive and process the apple sent by the previous node. This function reads the message from the pipe associated with the node and prints it.
+
+4. **Check if the Message is Intended for Them**:
+   - When a node receives the apple, it checks if the message is intended for it. This check is performed by examining the message content.
+
+5. **Process the Apple Accordingly**:
+   - If the message is intended for the node, it processes the message by printing it (or performing any other desired action) and sets the message content to 'empty'.
+   - If the message is not intended for the node, it forwards the message to the next node in the circular communication system by calling the `sendApple()` function.
