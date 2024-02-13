@@ -3,20 +3,29 @@
 #include "node.h"
 
 int main() {
-    int n;
+    int k;
     printf("Enter the number of nodes in the ring: ");
-    scanf("%d", &n);
+    scanf("%d", &k);
 
-    struct Node* ring = createRing(n);
-    printRing(ring, n);
-
-    struct Node* current = ring;
-    struct Node* temp;
-    for (int i = 0; i < n; i++) {
-        temp = current;
-        current = current->next;
-        free(temp);
+    struct Node* nodes = malloc(k * sizeof(struct Node));
+    if (nodes == NULL) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
     }
+
+    // Create and initialize nodes
+    for (int i = 0; i < k; i++) {
+        initializeNode(&nodes[i], i);
+    }
+
+    // Main loop for sending and receiving messages
+    for (int i = 0; i < k; i++) {
+        sendApple(&nodes[i], &nodes[(i + 1) % k], "Apple Message");
+        receiveApple(&nodes[i]);
+    }
+
+    // Free dynamically allocated memory
+    free(nodes);
 
     return 0;
 }
