@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "node.h"
+#include <string.h>
 
 // Function to prompt the user for the number of nodes
 int promptNumNodes() {
