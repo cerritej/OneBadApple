@@ -31,3 +31,19 @@ Design Overview and Implementation
 5. **Process the Apple Accordingly**:
    - If the message is intended for the node, it processes the message by printing it (or performing any other desired action) and sets the message content to 'empty'.
    - If the message is not intended for the node, it forwards the message to the next node in the circular communication system by calling the `sendApple()` function.
+  
+*C. User Interaction and Control:*
+
+1. **Display Verbose Diagnostic Messages**:
+   - The program provides verbose diagnostic messages by printing information about the actions it takes, such as sending a message from one node to another, receiving an apple, and handling any errors that occur.
+   - These messages are printed using `printf` statements in various parts of the code, including the `sendApple` and `receiveApple` functions in `node.c`, as well as the `main` function in `main.c`.
+
+2. **Implement Graceful Shutdown Mechanism using Signals**:
+   - The program implements a graceful shutdown mechanism using signals, specifically the `SIGINT` signal, which is sent when the user presses `Ctrl+C`.
+   - This mechanism is implemented in the `main` function in `main.c`, where a signal handler is set up using the `signal` function, and the handler function is defined to gracefully shut down the program by freeing memory and exiting.
+
+3. **Prompt User for Input**:
+   - The program prompts the user for input using `printf` statements in the `main` function in `main.c`.
+   - It requests the value of `k` (number of processes/nodes) by printing "Enter the number of nodes in the ring: ".
+   - It prompts for a string message to send by printing "Enter the message to send to node [node_id]: ".
+   - It prompts for the destination node by printing "Enter the destination node (0-k-1): ".
