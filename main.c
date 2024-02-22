@@ -12,7 +12,9 @@ int main() {
 
     // Prompt the user for the message
     printf("Enter the message to send: ");
-    scanf("%s", message);
+    getchar();  // consume newline character from previous scanf
+    fgets(message, sizeof(message), stdin);
+    message[strcspn(message, "\n")] = '\0';  // remove newline character from message
 
     // Prompt the user for the destination node
     printf("Enter the destination node (0-%d): ", k-1);
@@ -31,21 +33,18 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    // Create child processes to represent nodes
+    // Create and initialize nodes
     for (int i = 0; i < k; i++) {
-        if (fork() == 0) {
-            // Child process
-            initializeNode(&nodes[i], i);
-            sendApple(&nodes[i], &nodes[(i + 1) % k], message);
-            printf("Node %d sent the message '%s' to node %d.\n", i, message, (i + 1) % k);
-            receiveApple(&nodes[i]);
-            exit(EXIT_SUCCESS);
-        }
+        initializeNode(&nodes[i], i);
     }
 
-    // Wait for child processes to complete
+    // Main loop for sending and receiving messages
     for (int i = 0; i < k; i++) {
-        wait(NULL);
+        if (i == destNode) {
+            sendApple(&nodes[i], &nodes[(i + 1) % k], message);
+            printf("Node %d sent the message '%s' to node %d.\n", i, message, (i + 1) % k);
+        }
+        receiveApple(&nodes[i]);
     }
 
     // Free dynamically allocated memory
