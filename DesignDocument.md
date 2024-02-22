@@ -64,3 +64,14 @@ Design Overview and Implementation
 
 5. **Aim for Self-Documenting Code**:
    - The program aims for self-documenting code with minimal inline documentation. It uses meaningful variable and function names, clear logic, and consistent coding style to make the code easy to understand without the need for extensive comments.
+  
+*E. Additional Notes*
+
+1. **Handle Messages of More than One Word**:
+   - The program handles messages consisting of more than one word by using a character array (`message`) to store the message to be sent. The `fgets` function is used to read the message from the user, allowing for multiple words to be entered.
+
+2. **No Sleep System Calls or No-Op Loops**:
+   - The program does not use sleep system calls or no-op loops to maintain efficiency. Instead, it relies on the blocking nature of the `read` and `write` calls when reading from or writing to pipes, ensuring that the program does not waste CPU cycles while waiting for input or output.
+
+3. **Prompt for the Next Message to Send**:
+   - After the apple completes its traversal through the ring, the parent process prompts the user for the next message to send, including the destination node. This is achieved by using `printf` statements in the `main` function in `main.c` to prompt the user for input.
