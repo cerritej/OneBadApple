@@ -2,53 +2,63 @@
 #include <stdlib.h>
 #include "node.h"
 
+// Function to prompt the user for the number of nodes
+int promptNumNodes() {
+    int k;
+    printf("Enter the number of nodes in the ring: ");
+    scanf("%d", &k);
+    return k;
+}
+
+// Function to initialize nodes
+void initNodes(int k, struct Node* nodes) {
+    for (int i = 0; i < k; i++) {
+        initializeNode(&nodes[i], i);
+    }
+}
+
+// Function to prompt the user for a message and destination node
+void promptUser(char* message, int* destNode) {
+    printf("Enter the message to send: ");
+    getchar();  // consume newline character from previous scanf
+    fgets(message, sizeof(message), stdin);
+    message[strcspn(message, "\n")] = '\0';  // remove newline character from message
+
+    printf("Enter the destination node (0-%d): ", k-1);
+    scanf("%d", destNode);
+}
+
+// Function to send the apple to the destination node
+void sendAppleToNode(struct Node* nodes, int nodeIndex, const char* message, int destNode) {
+    sendApple(&nodes[nodeIndex], &nodes[destNode], message);
+    printf("Node %d sent the message '%s' to node %d.\n", nodeIndex, message, destNode);
+}
+
+// Function to receive the apple and process it
+void recvAndProcess(struct Node* nodes, int nodeIndex) {
+    receiveApple(&nodes[nodeIndex]);
+}
+
 int main() {
     int k, destNode;
     char message[256];
 
-    // Prompt the user for the number of nodes
-    printf("Enter the number of nodes in the ring: ");
-    scanf("%d", &k);
+    k = promptNumNodes();
 
-    // Allocate memory for nodes
     struct Node* nodes = malloc(k * sizeof(struct Node));
     if (nodes == NULL) {
         perror("malloc");
         exit(EXIT_FAILURE);
     }
 
-    // Create and initialize nodes
+    initNodes(k, nodes);
+
     for (int i = 0; i < k; i++) {
-        initializeNode(&nodes[i], i);
+        promptUser(message, &destNode);
+        sendAppleToNode(nodes, i, message, destNode);
+        recvAndProcess(nodes, i);
     }
 
-    // Main loop for sending and receiving messages
-    for (int i = 0; i < k; i++) {
-        // Prompt the user for the message
-        printf("Enter the message to send to node %d: ", i);
-        getchar();  // consume newline character from previous scanf
-        fgets(message, sizeof(message), stdin);
-        message[strcspn(message, "\n")] = '\0';  // remove newline character from message
-
-        // Prompt the user for the destination node
-        printf("Enter the destination node (0-%d): ", k-1);
-        scanf("%d", &destNode);
-
-        // Validate destination node input
-        if (destNode < 0 || destNode >= k) {
-            printf("Invalid destination node. Please enter a node between 0 and %d.\n", k-1);
-            return 1;
-        }
-
-        // Send the message to the destination node
-        sendApple(&nodes[i], &nodes[destNode], message);
-        printf("Node %d sent the message '%s' to node %d.\n", i, message, destNode);
-
-        // Receive the apple
-        receiveApple(&nodes[i]);
-    }
-
-    // Free dynamically allocated memory
     free(nodes);
 
     return 0;
