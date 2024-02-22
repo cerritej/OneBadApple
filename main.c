@@ -10,22 +10,6 @@ int main() {
     printf("Enter the number of nodes in the ring: ");
     scanf("%d", &k);
 
-    // Prompt the user for the message
-    printf("Enter the message to send: ");
-    getchar();  // consume newline character from previous scanf
-    fgets(message, sizeof(message), stdin);
-    message[strcspn(message, "\n")] = '\0';  // remove newline character from message
-
-    // Prompt the user for the destination node
-    printf("Enter the destination node (0-%d): ", k-1);
-    scanf("%d", &destNode);
-
-    // Validate destination node input
-    if (destNode < 0 || destNode >= k) {
-        printf("Invalid destination node. Please enter a node between 0 and %d.\n", k-1);
-        return 1;
-    }
-
     // Allocate memory for nodes
     struct Node* nodes = malloc(k * sizeof(struct Node));
     if (nodes == NULL) {
@@ -40,10 +24,27 @@ int main() {
 
     // Main loop for sending and receiving messages
     for (int i = 0; i < k; i++) {
-        if (i == destNode) {
-            sendApple(&nodes[i], &nodes[(i + 1) % k], message);
-            printf("Node %d sent the message '%s' to node %d.\n", i, message, (i + 1) % k);
+        // Prompt the user for the message
+        printf("Enter the message to send to node %d: ", i);
+        getchar();  // consume newline character from previous scanf
+        fgets(message, sizeof(message), stdin);
+        message[strcspn(message, "\n")] = '\0';  // remove newline character from message
+
+        // Prompt the user for the destination node
+        printf("Enter the destination node (0-%d): ", k-1);
+        scanf("%d", &destNode);
+
+        // Validate destination node input
+        if (destNode < 0 || destNode >= k) {
+            printf("Invalid destination node. Please enter a node between 0 and %d.\n", k-1);
+            return 1;
         }
+
+        // Send the message to the destination node
+        sendApple(&nodes[i], &nodes[destNode], message);
+        printf("Node %d sent the message '%s' to node %d.\n", i, message, destNode);
+
+        // Receive the apple
         receiveApple(&nodes[i]);
     }
 
