@@ -31,18 +31,21 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    // Create and initialize nodes
+    // Create child processes to represent nodes
     for (int i = 0; i < k; i++) {
-        initializeNode(&nodes[i], i);
-    }
-
-    // Main loop for sending and receiving messages
-    for (int i = 0; i < k; i++) {
-        if (i == destNode) {
+        if (fork() == 0) {
+            // Child process
+            initializeNode(&nodes[i], i);
             sendApple(&nodes[i], &nodes[(i + 1) % k], message);
             printf("Node %d sent the message '%s' to node %d.\n", i, message, (i + 1) % k);
+            receiveApple(&nodes[i]);
+            exit(EXIT_SUCCESS);
         }
-        receiveApple(&nodes[i]);
+    }
+
+    // Wait for child processes to complete
+    for (int i = 0; i < k; i++) {
+        wait(NULL);
     }
 
     // Free dynamically allocated memory
@@ -50,4 +53,3 @@ int main() {
 
     return 0;
 }
-
