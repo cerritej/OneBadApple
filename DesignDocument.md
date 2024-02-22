@@ -47,3 +47,20 @@ Design Overview and Implementation
    - It requests the value of `k` (number of processes/nodes) by printing "Enter the number of nodes in the ring: ".
    - It prompts for a string message to send by printing "Enter the message to send to node [node_id]: ".
    - It prompts for the destination node by printing "Enter the destination node (0-k-1): ".
+
+*D. Implementation Guidelines*
+
+1. **Utilize Process Management and IPC System Calls**:
+   - The program utilizes process management and IPC system calls, such as `fork`, `signal`, and `pipe`. These system calls are used to create and manage child processes, establish communication channels between them, and synchronize their actions.
+
+2. **Create and Manage Child Processes**:
+   - The program creates and manages child processes based on the provided value of `k` (number of processes/nodes). It uses a loop to create child processes, each representing a node in the circular communication system.
+
+3. **Interact with the User to Send Messages**:
+   - The program interacts with the user to send messages by prompting for input in the `main` function in `main.c`. It prompts the user for the message to send and the destination node.
+
+4. **Use Descriptive Variable Names**:
+   - The program uses descriptive variable names following the `camelCase` convention. For example, `nodes` represents an array of `struct Node` representing the nodes in the ring, and `destNode` represents the destination node for a message.
+
+5. **Aim for Self-Documenting Code**:
+   - The program aims for self-documenting code with minimal inline documentation. It uses meaningful variable and function names, clear logic, and consistent coding style to make the code easy to understand without the need for extensive comments.
