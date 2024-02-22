@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h> 
 #include "node.h"
-#include <string.h>
 
 // Function to prompt the user for the number of nodes
 int promptNumNodes() {
@@ -19,7 +19,7 @@ void initNodes(int k, struct Node* nodes) {
 }
 
 // Function to prompt the user for a message and destination node
-void promptUser(char* message, int* destNode) {
+void promptUser(char* message, int* destNode, int k) { 
     printf("Enter the message to send: ");
     getchar();  // consume newline character from previous scanf
     fgets(message, sizeof(message), stdin);
@@ -55,7 +55,7 @@ int main() {
     initNodes(k, nodes);
 
     for (int i = 0; i < k; i++) {
-        promptUser(message, &destNode);
+        promptUser(message, &destNode, k); 
         sendAppleToNode(nodes, i, message, destNode);
         recvAndProcess(nodes, i);
     }
