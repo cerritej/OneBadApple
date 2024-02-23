@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h> 
 #include "node.h"
+#define APPLE_MESSAGE 256
 
 // Function to prompt the user for the number of nodes
 int promptNumNodes() {
@@ -22,7 +23,7 @@ void initNodes(int k, struct Node* nodes) {
 void promptUser(char* message, int* destNode, int k) { 
     printf("Enter the message to send: ");
     getchar();  // consume newline character from previous scanf
-    fgets(message, sizeof(message), stdin);
+    fgets(message, APPLE_MESSAGE, stdin);
     message[strcspn(message, "\n")] = '\0';  // remove newline character from message
 
     printf("Enter the destination node (0-%d): ", k-1);
@@ -42,7 +43,7 @@ void recvAndProcess(struct Node* nodes, int nodeIndex) {
 
 int main() {
     int k, destNode;
-    char message[256];
+    char message[APPLE_MESSAGE];
 
     k = promptNumNodes();
 

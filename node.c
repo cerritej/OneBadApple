@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#define APPLE_MESSAGE 256
 
 void initializeNode(struct Node* node, int id) {
     node->id = id;
@@ -19,7 +20,7 @@ void initializeNode(struct Node* node, int id) {
 }
 
 void sendApple(struct Node* sender, struct Node* receiver, const char* message) {
-    ssize_t bytes_written = write(sender->write_fd, message, strlen(message) + 1);
+    ssize_t bytes_written = write(sender->write_fd, message, APPLE_MESSAGE);
     if (bytes_written == -1) {
         perror("write");
         exit(EXIT_FAILURE);
